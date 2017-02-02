@@ -21,8 +21,8 @@ void Password();
 void issuerecord();
 void loaderanim();
 FILE *cse,*elex,*Electrical,*civil,*mech,*metamin,*delete1,*ft2,*ft3,*ft4,*ft5,*ft6,*fs1,*fs2,*fs3,*fs4,*fs5,*fs6;
-int s;
-char foundbook;
+int s,ar;
+char foundbook,line[1000];
 char password[10]={"codebig"};
 COORD coord={0,0};
 void cursor (int x, int y)
@@ -38,9 +38,9 @@ struct Date
 struct books
 {
     int bookid;
-    char studentname[20];
-    char bookname[20];
-    char Author[20];
+    char studentname[50];
+    char bookname[50];
+    char Author[50];
     int numberofbooks;
     float Price;
     int count;
@@ -100,15 +100,24 @@ void Password(void)
     printf("Enter Password:");
     while(1)
     {
-        ch=getch();
-        if(ch!=13)
-        {
-       putch('*');
-        pass[i] = ch;
-            i++;
-        }
-        else if(ch==13)
-            break;
+    if(i<0)
+        i=0;
+      ch = getch();
+      if(ch==13)
+        break;
+      else if(ch==8)
+      {
+putch('\b');
+putch(NULL);
+putch('\b');
+i--;
+continue;
+      }
+      else{
+        pass[i]=ch;
+        i++;
+        putch('*');
+      }
      }
     pass[i] = '\0';
     if(strcmp(pass,password)==0)
@@ -192,29 +201,39 @@ void mainmenu()
                     break;
         case '5':
                     system("cls");
-                    cursor(16,3);
-                    printf("\tTERM PROJECT IN C");
-                    cursor(16,4);
-                    printf("\tLIBRARY MANAGEMENT SYSTEM");
-                    cursor(0,5);
-                    printf("BY\tMODUGULA VENKATA SAI GEETHIKA\tLAKSHMI PRIYA KOLLI\tASMA SONI");
-                    cursor(16,7);
-                    printf("\tCOMPUTER SCIENCE");
+                    cursor(30,3);
+                    printf("TERM PROJECT IN C");
+                    cursor(26,4);
+                    printf("LIBRARY MANAGEMENT SYSTEM");
+                    cursor(28,5);
+                    printf("BY  LAKSHMI PRIYA KOLLI");
+                    cursor(28,7);
+                    printf("COMPUTER SCIENCE");
                     cursor(16,8);
                     printf("--------------------------------------------");
                     cursor(16,10);
                     printf("--------------------------------------------");
-                    cursor(10,13);
-                    printf("Exiting in 3 second...........>");
-                    Sleep(3000);
+                    cursor(16,13);
+                    printf("Exiting...........");
                     exit(0);
                     break;
         default:
                     cursor(10,23);
-                    printf("\aWrong Entry!!Please re-enter correct option");
+                    printf("\nWrong Entry!!Please re-enter correct option");
                     if(getch())
                         mainmenu();
                     break;
+    }
+}
+int check_book(int id,FILE *temp)
+{
+    int x;;
+char line[1000];
+     while(fgets ( line, sizeof line, temp ) != NULL){
+
+    sscanf(line, "%d", &x);
+    if(id==x)
+    return 1;
     }
 }
 void addbooks()
@@ -247,6 +266,7 @@ void addbooks()
         mainmenu() ;
     }
     system("cls");
+    printf("*******************Enter details without spaces*******************\n");
     switch(s)
     {
         case '1':
@@ -254,15 +274,24 @@ void addbooks()
                     cse=fopen("cse.txt","a+");
                     printf("Enter The unique id of The Book :(Integer) \n");
                     scanf("%d",&a.bookid);
+                    ar=check_book(a.bookid,cse);
+                    if(ar==1)
+                    {
+                        printf("Record already exists\nPress any key to go back to main menu\n");
+                        getch();
+                        mainmenu();
+                    }
                     printf("Enter The Name of The Book :\n");
-                    scanf("%s",a.bookname);
+                    fflush(stdin);
+                    gets(a.bookname);
                     printf("Enter The Name of Author :\n");
-                    scanf("%s",a.Author);
+                    fflush(stdin);
+                    gets(a.Author);
                     printf("Enter The Number of books :\n");
                     scanf("%d",&a.numberofbooks);
                     printf("Enter The Price Of Book :\n");
                     scanf("%f",&a.Price);
-                    fprintf(cse,"%d\t\t%s\t\t%s\t\t%d\t\t%f\t\t\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
+                    fprintf(cse,"%d\t\t%s\t\t\t%s\t\t\t\t%d\t\t%f\t\t\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
                     printf("Record Saved Successfully");
                     fclose(cse);
                     printf("\nPress Enter to continue to main menu");
@@ -275,10 +304,19 @@ void addbooks()
                     elex=fopen("elex.txt","a+");
                     printf("Enter The unique id of The Book :(Integer) \n");
                     scanf("%d",&a.bookid);
+                    ar=check_book(a.bookid,elex );
+                    if(ar==1)
+                    {
+                        printf("Record already exists\nPress any key to go back to main menu\n");
+                        getch();
+                        mainmenu();
+                    }
                     printf("Enter The Name of The Book :\n");
-                    scanf("%s",a.bookname);
+                    fflush(stdin);
+                    gets(a.bookname);
                     printf("Enter The Name of Author :\n");
-                    scanf("%s",a.Author);
+                    fflush(stdin);
+                    gets(a.Author);
                     printf("Enter The Number of books :\n");
                     scanf("%d",&a.numberofbooks);
                     printf("Enter The Price Of Book :\n");
@@ -296,10 +334,19 @@ void addbooks()
                     Electrical=fopen("Electrical.txt","a+");
                     printf("Enter The unique id of The Book :(Integer) \n");
                     scanf("%d",&a.bookid);
+                    ar=check_book(a.bookid,Electrical);
+                    if(ar==1)
+                    {
+                        printf("Record already exists\nPress any key to go back to main menu\n");
+                        getch();
+                        mainmenu();
+                    }
                     printf("Enter The Name of The Book :\n");
-                    scanf("%s",a.bookname);
+                    fflush(stdin);
+                    gets(a.bookname);
                     printf("Enter The Name of Author :\n");
-                    scanf("%s",a.Author);
+                    fflush(stdin);
+                    gets(a.Author);
                     printf("Enter The Number of books :\n");
                     scanf("%d",&a.numberofbooks);
                     printf("Enter The Price Of Book :\n");
@@ -317,10 +364,19 @@ void addbooks()
                     civil=fopen("civil.txt","a+");
                     printf("Enter The unique id of The Book :(Integer) \n");
                     scanf("%d",&a.bookid);
+                    ar=check_book(a.bookid,civil);
+                    if(ar==1)
+                    {
+                        printf("Record already exists\nPress any key to go back to main menu\n");
+                        getch();
+                        mainmenu();
+                    }
                     printf("Enter The Name of The Book :\n");
-                    scanf("%s",a.bookname);
+                    fflush(stdin);
+                    gets(a.bookname);
                     printf("Enter The Name of Author :\n");
-                    scanf("%s",a.Author);
+                    fflush(stdin);
+                    gets(a.bookname);
                     printf("Enter The Number of books :\n");
                     scanf("%d",&a.numberofbooks);
                     printf("Enter The Price Of Book :\n");
@@ -338,10 +394,19 @@ void addbooks()
                     mech=fopen("mech.txt","a+");
                     printf("Enter The unique id of The Book :(Integer) \n");
                     scanf("%d",&a.bookid);
+                    ar=check_book(a.bookid,mech);
+                    if(ar==1)
+                    {
+                        printf("Record already exists\nPress any key to go back to main menu\n");
+                        getch();
+                        mainmenu();
+                    }
                     printf("Enter The Name of The Book :\n");
-                    scanf("%s",a.bookname);
+                    fflush(stdin);
+                    gets(a.bookname);
                     printf("Enter The Name of Author :\n");
-                    scanf("%s",a.Author);
+                    fflush(stdin);
+                    gets(a.Author);
                     printf("Enter The Number of books :\n");
                     scanf("%d",&a.numberofbooks);
                     printf("Enter The Price Of Book :\n");
@@ -359,10 +424,19 @@ void addbooks()
                     metamin=fopen("metamin.txt","a+");
                     printf("Enter The unique id of The Book :(Integer) \n");
                     scanf("%d",&a.bookid);
+                    ar=check_book(a.bookid,metamin);
+                    if(ar==1)
+                    {
+                        printf("Record already exists\nPress any key to go back to main menu\n");
+                        getch();
+                        mainmenu();
+                    }
                     printf("Enter The Name of The Book :\n");
-                    scanf("%s",a.bookname);
+                    fflush(stdin);
+                    gets(a.bookname);
                     printf("Enter The Name of Author :\n");
-                    scanf("%s",a.Author);
+                    fflush(stdin);
+                    gets(a.Author);
                     printf("Enter The Number of books :\n");
                     scanf("%d",&a.numberofbooks);
                     printf("Enter The Price Of Book :\n");
@@ -1080,19 +1154,22 @@ int search_viewbooks()
                     else
                     {
                         printf("\nEnter The Name Of Book : ");
-                        scanf("%s",Target);
-                        while(!feof(cse)&&Found==0)
-                        {
+                        fflush(stdin);
+                        gets(Target);
+                        char line[1000];
+                        while(fgets ( line, sizeof line, cse ) != NULL)
+                            {
                             fscanf(cse,"%d %s %s %d %f", &a.bookid,a.bookname,a.Author,&a.numberofbooks,&a.Price);
                             if(strcmp(Target,a.bookname)==0)
                             {
                                 Found=1;
                             }
-                        }
-                        printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
-                    }
-                    if(!Found)
+                            }
+                        if(Found==1)
+                            printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
+                        else
                         printf("! There is no such Entry...\n");
+                    }
                     fclose(cse);
                     break;
         case '2':
@@ -1105,18 +1182,19 @@ int search_viewbooks()
                     {
                         printf("\nEnter The Name Of Book : ");
                         scanf("%s",Target);
-                        while(!feof(elex)&&Found==0)
-                        {
-                            fscanf(elex,"%d %s %s %d %f", &a.bookid,a.bookname,a.Author,&a.numberofbooks,&a.Price);
+                        while(fgets ( line, sizeof line, elex ) != NULL)
+                            {
+                            fscanf(cse,"%d %s %s %d %f", &a.bookid,a.bookname,a.Author,&a.numberofbooks,&a.Price);
                             if(strcmp(Target,a.bookname)==0)
                             {
                                 Found=1;
                             }
-                        }
-                        printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
-                    }
-                    if(!Found)
+                            }
+                        if(Found==1)
+                            printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
+                        else
                         printf("! There is no such Entry...\n");
+                        }
                     fclose(elex);
                     break;
         case '3':
@@ -1129,18 +1207,20 @@ int search_viewbooks()
                     {
                         printf("\nEnter The Name Of Book : ");
                         scanf("%s",Target);
-                        while(!feof(Electrical)&&Found==0)
-                        {
-                            fscanf(Electrical,"%d %s %s %d %f", &a.bookid,a.bookname,a.Author,&a.numberofbooks,&a.Price);
+                        char line[1000];
+                        while(fgets ( line, sizeof line, Electrical ) != NULL)
+                            {
+                            fscanf(cse,"%d %s %s %d %f", &a.bookid,a.bookname,a.Author,&a.numberofbooks,&a.Price);
                             if(strcmp(Target,a.bookname)==0)
                             {
                                 Found=1;
                             }
-                        }
-                        printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
-                    }
-                    if(!Found)
+                            }
+                        if(Found==1)
+                            printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
+                        else
                         printf("! There is no such Entry...\n");
+                        }
                     fclose(Electrical);
                     break;
         case '4':
@@ -1153,18 +1233,20 @@ int search_viewbooks()
                     {
                         printf("\nEnter The Name Of Book : ");
                         scanf("%s",Target);
-                        while(!feof(civil)&&Found==0)
-                        {
-                            fscanf(civil,"%d %s %s %d %f", &a.bookid,a.bookname,a.Author,&a.numberofbooks,&a.Price);
+                        char line[1000];
+                        while(fgets ( line, sizeof line, civil ) != NULL)
+                            {
+                            fscanf(cse,"%d %s %s %d %f", &a.bookid,a.bookname,a.Author,&a.numberofbooks,&a.Price);
                             if(strcmp(Target,a.bookname)==0)
                             {
                                 Found=1;
                             }
-                        }
-                        printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
-                    }
-                    if(!Found)
+                            }
+                        if(Found==1)
+                            printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
+                        else
                         printf("! There is no such Entry...\n");
+                        }
                     fclose(civil);
                     break;
         case '5':
@@ -1177,18 +1259,20 @@ int search_viewbooks()
                     {
                         printf("\nEnter The Name Of Book : ");
                         scanf("%s",Target);
-                        while(!feof(mech)&&Found==0)
-                        {
-                            fscanf(mech,"%d %s %s %d %f", &a.bookid,a.bookname,a.Author,&a.numberofbooks,&a.Price);
+                        char line[1000];
+                        while(fgets ( line, sizeof line, mech ) != NULL)
+                            {
+                            fscanf(cse,"%d %s %s %d %f", &a.bookid,a.bookname,a.Author,&a.numberofbooks,&a.Price);
                             if(strcmp(Target,a.bookname)==0)
                             {
                                 Found=1;
                             }
-                        }
-                        printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
-                    }
-                    if(!Found)
+                            }
+                        if(Found==1)
+                            printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
+                        else
                         printf("! There is no such Entry...\n");
+                    }
                     fclose(mech);
                     break;
         case '6':
@@ -1201,18 +1285,20 @@ int search_viewbooks()
                     {
                         printf("\nEnter The Name Of Book : ");
                         scanf("%s",Target);
-                        while(!feof(metamin)&&Found==0)
-                        {
+                        char line[1000];
+                        while(fgets ( line, sizeof line, metamin ) != NULL)
+                            {
                             fscanf(cse,"%d %s %s %d %f", &a.bookid,a.bookname,a.Author,&a.numberofbooks,&a.Price);
                             if(strcmp(Target,a.bookname)==0)
                             {
                                 Found=1;
                             }
-                        }
-                        printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
-                    }
-                    if(!Found)
+                            }
+                        if(Found==1)
+                            printf("\nThe ID of The Book:  %d\nThe Name of Book is:  %s\nThe Author of the book is: %s\nQuantity: %d\nPrice: %f\n",a.bookid,a.bookname,a.Author,a.numberofbooks,a.Price);
+                        else
                         printf("! There is no such Entry...\n");
+                    }
                     fclose(metamin);
                     break;
     }
