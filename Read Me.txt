@@ -1,0 +1,12 @@
+Password for access: codebig
+getch() in the program code works fine with versions till 12.11
+In case if you find any problem with getch() with the error "Drawing operation was attempted before window load" 
+then change getch() to getchar() and update ascii values of characters to actual escape sequences.
+For Ex:
+Change-
+getch()
+if(ch==13)
+To-
+getchar()
+if(ch=='\n')
+where 13 is Ascii value of enter key.
